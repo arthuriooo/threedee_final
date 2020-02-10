@@ -12,6 +12,7 @@ left: 0;
 width: 100%;
 height: auto;
 margin: 0;
+padding-bottom: 50px;
 display: flex;
 flex-direction: column;
 justify-content: center;
@@ -19,14 +20,6 @@ justify-content: center;
 background-image: url(${Beton});
 background-repeat: repeat;
 `
-
-// const PageWrapper = styled.div`
-// position: relative;
-// width: 100%;
-// height: 100%;
-// top: 0;
-// left: 0;
-// `
 
 const Header = styled.div`
 width: 100%;
@@ -52,13 +45,13 @@ align-items: center;
 `
 
 const Wrapper = styled.div`
-height: 10em;
-width: 10em;
+height: 8em;
+width: 8em;
 margin: 20px;
 
 
 perspective: 1000px;
-perspective-origin: center -5em;
+perspective-origin: center -4em;
 `
 
 const Container = styled.div`
@@ -80,16 +73,16 @@ transform: ${props =>
 
 const Side = styled.div`
 position: absolute;
-width: 10em;
-height: 10em;
+width: 8em;
+height: 8em;
 opacity: 1;
 border: 1px solid purple;
 
 transform: ${props =>
-    props.side === 'Left' ? 'translateX(-5em) rotateY(270deg)' :
-      props.side === 'Right' ? 'translateX(5em) rotateY(90deg)' :
-        props.side === 'Top' ? 'translateY(-5em) rotateX(90deg)' :
-          props.side === 'Bottom' ? 'translateY(5em) rotateX(270deg)' :
+    props.side === 'Left' ? 'translateX(-4em) rotateY(270deg)' :
+      props.side === 'Right' ? 'translateX(4em) rotateY(90deg)' :
+        props.side === 'Top' ? 'translateY(-4em) rotateX(90deg)' :
+          props.side === 'Bottom' ? 'translateY(4em) rotateX(270deg)' :
             ''};
 /* background-color: ${props => props.side === 'Top' ? 'white' : null}; */
 background-image: url(${props => props.side !== 'Top' ? props.backImage : Logo});
@@ -98,11 +91,11 @@ background-size: cover;
 `
 
 const Back = styled(Side)`
-transform: translateZ(-5em);
+transform: translateZ(-4em);
 `
 
 const Front = styled(Side)`
-transform: translateZ(5em);
+transform: translateZ(4em);
 background-image: url(${props => props.backImage});
 background-size: cover;
 opacity: 1;
@@ -130,8 +123,8 @@ const Loader = styled.div`
   position: absolute;
   width: 200px;
   height: 200px;
-  /* top: 50vh; */
-  /* left: 50vw; */
+  top: 50vh;
+  left: 50vw;
   transform: translateX(-100px) translateY(-100px);
   background-image: url(${Logo});
   background-size: cover;
@@ -145,7 +138,6 @@ const LogoWrapper = styled.img`
 `
 
 const sides = ['Bottom', 'Left', 'Right', 'Top']
-
 
 class App extends React.Component {
 
@@ -170,6 +162,13 @@ class App extends React.Component {
   render() {
     const { loading } = this.state
 
+    // const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
+    // const isTabletOrMobileDevice = useMediaQuery({
+    //   query: '(max-device-width: 1224px)'
+    // })
+    // const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
+    // const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
+
     return (
       <Page>
         {loading ? <Loader /> :
@@ -182,18 +181,24 @@ class App extends React.Component {
                 {images.originals.map((image, imageIndex) => {
                   const random = Math.floor(Math.random() * 3);
 
-                  return <Wrapper key={image}>
-                    <Container side={random === 0 ? 'Bottom' : random === 1 ? 'Left' : random === 2 ? 'Right' : 'Left'}>
-                      <Back />
+                  if (imageIndex < 40) {
+                    return null
+                  } else {
 
-                      {sides.map((side, index) => {
-                        return <Side side={side} backImage={index === random ? images.edited[imageIndex] : ''} />
-                      })}
+                    return <Wrapper key={image}>
+                      <Container side={random === 0 ? 'Bottom' : random === 1 ? 'Left' : random === 2 ? 'Right' : 'Left'}>
+                        <Back />
 
-                      <Front backImage={image} />
-                    </Container>
-                  </Wrapper>
+                        {sides.map((side, index) => {
+                          return <Side side={side} backImage={index === random ? images.edited[imageIndex] : ''} />
+                        })}
+
+                        <Front backImage={image} />
+                      </Container>
+                    </Wrapper>
+                  }
                 })}
+
               </WrapperOfWrapper>
             </>
           )}
